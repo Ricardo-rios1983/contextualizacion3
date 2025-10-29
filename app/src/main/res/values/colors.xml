@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="VerdeForm">#048f19</color>
+
+    <color name="colorPrimary">#007AFF</color>
+    <color name="colorPrimaryDark">#0051A8</color>
+    <color name="colorAccent">#FFC107</color>
+
+    <!-- 🎨 Colores de fondo -->
+    <color name="colorBackground">#F9F9F9</color>
+    <color name="colorCard">#FFFFFF</color>
+
+    <!-- 🎨 Colores de texto -->
+    <color name="colorTextPrimary">#000000</color>
+    <color name="colorTextSecondary">#555555</color>
+
+    <!-- 🎨 Colores del botón -->
+    <color name="colorButton">#048f19</color>
+    <color name="colorButtonText">#FFFFFF</color>
+
+    <!-- 🎨 Colores de error y éxito -->
+    <color name="colorError">#E53935</color>
+    <color name="colorSuccess">#4CAF50</color>
+</resources>

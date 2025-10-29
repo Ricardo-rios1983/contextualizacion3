@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Contextualizacion3" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:background">@color/colorBackground</item>
+    </style>
+
+    <style name="Theme.Contextualizacion3" parent="Base.Theme.Contextualizacion3" />
+</resources>
