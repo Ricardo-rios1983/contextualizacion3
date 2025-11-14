@@ -1,16 +1,15 @@
 package db;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "Producto")
 public class Producto {
+    @PrimaryKey(autoGenerate = true)
     public int id;
+    @NonNull
     public String nombre;
     public String descripcion;
     public double precio;
-
-
-    public Producto(int id, String name, String descripcion, double precio) {
-        this.id = id;
-        this.nombre = name;
-        this.descripcion = descripcion;
-        this.precio = precio;
-    }
 }

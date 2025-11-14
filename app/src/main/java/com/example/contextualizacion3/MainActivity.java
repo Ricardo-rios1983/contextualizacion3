@@ -15,6 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import db.AppDatabase;
+import db.Cliente;
+import db.ClienteDao;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "CicloVida";
@@ -38,14 +42,27 @@ public class MainActivity extends AppCompatActivity {
             String pass = etPassword.getText().toString().trim();
 
             if (email.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
-            } else if (email.equals("rrrios@gmail.com") && pass.equals("12345678")) {
-                Intent intent = new Intent(this, ProductosListActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Ingrese correo y contraseña", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            new Thread(() -> {
+                AppDatabase db = AppDatabase.get(getApplicationContext());
+                ClienteDao dao = db.clienteDao();
+                Cliente cliente = dao.findByEmail(email);
+
+                runOnUiThread(() -> {
+                    if (cliente == null) {
+                        Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
+                    } else if (!cliente.password.equals(pass)) {
+                        Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(this, ProductosListActivity.class));
+                        finish();
+                    }
+                });
+            }).start();
         });
 
         tvRegistrar.setOnClickListener(v -> {

@@ -1,7 +1,9 @@
 package com.example.contextualizacion3;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import db.AppDatabase;
 import db.CartRepository;
 import db.Producto;
 
@@ -23,31 +26,55 @@ public class ProductosListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductoAdapter adapter;
     private List<Producto> productos = new ArrayList<>();
-
+    private Button btnUbicacion;
     private static final String TAG = "Ciclo Vida";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_productos_list);
+        try {
+            super.onCreate(savedInstanceState);
+            EdgeToEdge.enable(this);
+            setContentView(R.layout.activity_productos_list);
+            btnUbicacion = findViewById(R.id.btnUbicacion);
 
-        recyclerView = findViewById(R.id.recyclerProductos);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView = findViewById(R.id.recyclerProductos);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        productos.add(new Producto(1, "Camiseta", "Camiseta 100% algodón", 100000.0));
-        productos.add(new Producto(2, "Pantalón", "Pantalón de mezclilla", 150000.0));
-        productos.add(new Producto(3, "Zapatillas", "Zapatillas deportivas", 220000.0));
-        productos.add(new Producto(4, "Gorra", "Gorra ajustable de algodón", 80000.0));
-        productos.add(new Producto(5, "sudadera", "sudadera de algodón", 400000.0));
+            adapter = new ProductoAdapter(new ArrayList<>(), product -> {
+                new Thread(() -> {
+                    CartRepository.addToCart(ProductosListActivity.this, product);
+                }).start();
+                Toast.makeText(this, product.nombre + " añadido al carrito", Toast.LENGTH_SHORT).show();
+            });
 
-        adapter = new ProductoAdapter(productos, product -> {
-            CartRepository.addToCart(product);
-            Toast.makeText(this, product.nombre + " añadido al carrito", Toast.LENGTH_SHORT).show();
-        });
+            recyclerView.setAdapter(adapter);
 
-        recyclerView.setAdapter(adapter);
+            new Thread(() -> {
+                AppDatabase db = AppDatabase.get(this);
+                if (db.productoDao().getAll().isEmpty()) {
+                    db.productoDao().insertAll(
+                            make("Camiseta", "Algodón", 100000),
+                            make("Pantalón", "Mezclilla", 150000),
+                            make("Zapatillas", "Deportivas", 220000)
+                    );
+                }
+
+                List<Producto> products = db.productoDao().getAll();
+                runOnUiThread(() -> {
+                    adapter.setProducts(products);
+                    adapter.notifyDataSetChanged();
+                });
+            }).start();
+
+            btnUbicacion.setOnClickListener(v -> {
+                Intent i = new Intent(this, MapsActivity.class);
+                startActivity(i);
+            });
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+        }
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -84,4 +111,7 @@ public class ProductosListActivity extends AppCompatActivity {
         Log.d(TAG, "onDestroy: La Activity se está destruyendo.");
     }
 
+    private Producto make(String n, String d, double p){
+        Producto pr = new Producto(); pr.nombre=n; pr.descripcion=d; pr.precio=p; return pr;
+    }
 }

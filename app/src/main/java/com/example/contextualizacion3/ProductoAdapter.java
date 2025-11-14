@@ -11,6 +11,10 @@ import java.util.List;
 import db.Producto;
 
 public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ViewHolder> {
+    public void setProducts(List<Producto> list) {
+        this.productos = list;
+    }
+
     public interface OnProductClickListener {
         void onClick(Producto product);
     }
