@@ -12,6 +12,8 @@ import androidx.room.PrimaryKey;
         indices = {@Index("productoId")})
 public class CartItem {
     @PrimaryKey(autoGenerate = true) public int id;
+
+    public int idCompra;
     public int productoId;
     public int cantidad;
 }

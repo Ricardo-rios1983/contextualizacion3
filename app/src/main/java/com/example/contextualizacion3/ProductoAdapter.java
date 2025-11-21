@@ -53,12 +53,15 @@ public class ProductoAdapter extends RecyclerView.Adapter<ProductoAdapter.ViewHo
         TextView tvName, tvDesc, tvPrice;
         Button btnAdd;
 
+        Button btnQuitar;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvProductonombre);
             tvDesc = itemView.findViewById(R.id.tvProductoDesc);
             tvPrice = itemView.findViewById(R.id.tvProductoPrecio);
             btnAdd = itemView.findViewById(R.id.btnAction);
+            btnQuitar = itemView.findViewById(R.id.btnEliminar);
         }
     }
 }

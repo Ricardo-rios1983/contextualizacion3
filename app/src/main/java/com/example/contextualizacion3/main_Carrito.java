@@ -35,6 +35,7 @@ public class main_Carrito extends AppCompatActivity {
 
         recyclerCarrito.setLayoutManager(new LinearLayoutManager(this));
         List<Producto> items = CartRepository.getCart();
+        tvTotal.setText("Total: $");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

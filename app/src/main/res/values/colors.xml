@@ -23,4 +23,6 @@
     <!-- 🎨 Colores de error y éxito -->
     <color name="colorError">#E53935</color>
     <color name="colorSuccess">#4CAF50</color>
+
+    <color name="colorQuitar">#a1312a</color>
 </resources>

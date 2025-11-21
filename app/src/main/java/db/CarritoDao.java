@@ -13,8 +13,8 @@ public interface CarritoDao {
     @Query("SELECT * FROM cart_items")
     List<CartItem> getAll();
 
-    @Query("SELECT * FROM cart_items WHERE productoId = :productId LIMIT 1")
-    CartItem findByProduct(int productId);
+    @Query("SELECT * FROM cart_items WHERE idcompra = :compra AND productoId = :productId LIMIT 1")
+    CartItem findByProduct(int compra, int productId);
 
     @Insert
     long insert(CartItem c);

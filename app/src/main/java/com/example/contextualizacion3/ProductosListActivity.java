@@ -28,6 +28,7 @@ public class ProductosListActivity extends AppCompatActivity {
     private List<Producto> productos = new ArrayList<>();
     private Button btnUbicacion;
     private static final String TAG = "Ciclo Vida";
+    private long compraIdActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +38,19 @@ public class ProductosListActivity extends AppCompatActivity {
             setContentView(R.layout.activity_productos_list);
             btnUbicacion = findViewById(R.id.btnUbicacion);
 
+            compraIdActual = getIntent().getLongExtra("ID_COMPRA_ACTUAL", -1);
+
+
+            if (compraIdActual == -1) {
+                Toast.makeText(this, "Error al cargar la compra", Toast.LENGTH_SHORT).show();
+            }
+
             recyclerView = findViewById(R.id.recyclerProductos);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
             adapter = new ProductoAdapter(new ArrayList<>(), product -> {
                 new Thread(() -> {
-                    CartRepository.addToCart(ProductosListActivity.this, product);
+                    CartRepository.addToCart(ProductosListActivity.this, product,compraIdActual);
                 }).start();
                 Toast.makeText(this, product.nombre + " añadido al carrito", Toast.LENGTH_SHORT).show();
             });

@@ -18,6 +18,8 @@ import androidx.core.view.WindowInsetsCompat;
 import db.AppDatabase;
 import db.Cliente;
 import db.ClienteDao;
+import db.Compra;
+import db.CompraDao;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,17 +53,48 @@ public class MainActivity extends AppCompatActivity {
                 ClienteDao dao = db.clienteDao();
                 Cliente cliente = dao.findByEmail(email);
 
+                long idNuevaCompra;
+                boolean loginExitoso = false;
+                String mensaje = "";
+
+                if (cliente == null) {
+                    idNuevaCompra = 0;
+                    mensaje = "Usuario no encontrado";
+                } else if (!cliente.password.equals(pass)) {
+                    idNuevaCompra = 0;
+                    mensaje = "Contraseña incorrecta";
+                } else {
+                    loginExitoso = true;
+                    mensaje = "Inicio de sesión exitoso";
+
+                    Compra compra = new Compra();
+                    compra.IdCliente = cliente.id;
+                    CompraDao compraDao = db.compraDao();
+                    idNuevaCompra = compraDao.insert(compra);
+                }
+
+                final boolean finalLoginExitoso = loginExitoso;
+                final String finalMensaje = mensaje;
+
                 runOnUiThread(() -> {
-                    if (cliente == null) {
-                        Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
-                    } else if (!cliente.password.equals(pass)) {
-                        Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, ProductosListActivity.class);
+
+                    // Enviamos el ID a la siguiente actividad
+                    intent.putExtra("ID_COMPRA_ACTUAL", idNuevaCompra);
+
+                    startActivity(intent);
+                    finish();
+                });
+
+                /*
+                runOnUiThread(() -> {
+                    Toast.makeText(this, finalMensaje, Toast.LENGTH_SHORT).show();
+                    if (finalLoginExitoso) {
                         startActivity(new Intent(this, ProductosListActivity.class));
                         finish();
                     }
-                });
+                });*/
             }).start();
         });
 
